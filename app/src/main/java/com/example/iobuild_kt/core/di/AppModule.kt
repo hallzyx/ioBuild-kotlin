@@ -76,7 +76,7 @@ val analyticsModule = module {
 
 val projectsModule = module {
     single<ProjectApiService> { get<Retrofit>().create(ProjectApiService::class.java) }
-    single<ProjectRepository> { ProjectRepositoryImpl(get()) }
+    single<ProjectRepository> { ProjectRepositoryImpl(get(), get(), get()) }
     factory { GetProjectsUseCase(get()) }
     factory { GetProjectByIdUseCase(get()) }
     factory { CreateProjectUseCase(get()) }
@@ -89,7 +89,7 @@ val projectsModule = module {
 
 val clientsModule = module {
     single<ClientApiService> { get<Retrofit>().create(ClientApiService::class.java) }
-    single<ClientRepository> { ClientRepositoryImpl(get()) }
+    single<ClientRepository> { ClientRepositoryImpl(get(), get(), get()) }
     factory { GetClientsUseCase(get()) }
     factory { GetClientByIdUseCase(get()) }
     factory { CreateClientUseCase(get()) }
@@ -100,7 +100,7 @@ val clientsModule = module {
 
 val devicesModule = module {
     single<DeviceApiService> { get<Retrofit>().create(DeviceApiService::class.java) }
-    single<DeviceRepository> { DeviceRepositoryImpl(get()) }
+    single<DeviceRepository> { DeviceRepositoryImpl(get(), get(), get()) }
     factory { GetDevicesUseCase(get()) }; factory { GetDeviceByIdUseCase(get()) }
     factory { CreateDeviceUseCase(get()) }; factory { UpdateDeviceUseCase(get()) }; factory { DeleteDeviceUseCase(get()) }
     viewModelOf(::DeviceListViewModel)
