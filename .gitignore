@@ -27,6 +27,7 @@ Thumbs.db
 *.class
 *.kotlin_module
 
-# Config files with secrets (create if needed)
+# Config files with secrets (API keys, tokens, URLs)
+api.properties
 *.env
 secrets.properties
