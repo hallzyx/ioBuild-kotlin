@@ -36,6 +36,13 @@ import com.example.iobuild_kt.devices.domain.usecase.GetDevicesUseCase
 import com.example.iobuild_kt.devices.domain.usecase.UpdateDeviceUseCase
 import com.example.iobuild_kt.devices.presentation.device_list.DeviceListViewModel
 import com.example.iobuild_kt.projects.presentation.project_detail.ProjectDetailViewModel
+import com.example.iobuild_kt.subscription.data.api.PlanApiService
+import com.example.iobuild_kt.subscription.data.api.SubscriptionApiService
+import com.example.iobuild_kt.subscription.data.repository.SubscriptionRepositoryImpl
+import com.example.iobuild_kt.subscription.domain.repository.SubscriptionRepository
+import com.example.iobuild_kt.subscription.domain.usecase.GetPlansUseCase
+import com.example.iobuild_kt.subscription.domain.usecase.GetSubscriptionUseCase
+import com.example.iobuild_kt.subscription.presentation.SubscriptionViewModel
 import com.example.iobuild_kt.projects.presentation.project_form.ProjectFormViewModel
 import com.example.iobuild_kt.projects.presentation.project_list.ProjectListViewModel
 import org.koin.core.module.dsl.viewModelOf
@@ -87,4 +94,12 @@ val devicesModule = module {
     viewModelOf(::DeviceListViewModel)
 }
 
-val appModule = listOf(networkModule, dataModule, authModule, analyticsModule, projectsModule, clientsModule, devicesModule)
+val subscriptionModule = module {
+    single<PlanApiService> { get<Retrofit>().create(PlanApiService::class.java) }
+    single<SubscriptionApiService> { get<Retrofit>().create(SubscriptionApiService::class.java) }
+    single<SubscriptionRepository> { SubscriptionRepositoryImpl(get(), get()) }
+    factory { GetPlansUseCase(get()) }; factory { GetSubscriptionUseCase(get()) }
+    viewModelOf(::SubscriptionViewModel)
+}
+
+val appModule = listOf(networkModule, dataModule, authModule, analyticsModule, projectsModule, clientsModule, devicesModule, subscriptionModule)

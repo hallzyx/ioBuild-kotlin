@@ -13,6 +13,7 @@ import com.example.iobuild_kt.core.ui.components.IoScaffold
 import com.example.iobuild_kt.clients.presentation.client_list.ClientListScreen
 import com.example.iobuild_kt.dashboard.presentation.DashboardScreen
 import com.example.iobuild_kt.devices.presentation.device_list.DeviceListScreen
+import com.example.iobuild_kt.subscription.presentation.SubscriptionScreen
 import com.example.iobuild_kt.projects.presentation.project_detail.ProjectDetailScreen
 import com.example.iobuild_kt.projects.presentation.project_form.ProjectFormScreen
 import com.example.iobuild_kt.projects.presentation.project_list.ProjectListScreen
@@ -153,7 +154,7 @@ fun NavGraph(
             }
             composable(Screen.Subscription.route) {
                 IoScaffold(currentRoute = Screen.Subscription.route, currentLang = currentLang, onNavigate = { screen -> navController.navigate(screen.route) }, onLogout = { navController.navigate(Screen.Login.route) { popUpTo(0) { inclusive = true } } }, onLanguageChange = onLanguageChange) {
-                    PlaceholderScreen("Suscripción")
+                    SubscriptionScreen()
                 }
             }
             composable(Screen.Profile.route) {
