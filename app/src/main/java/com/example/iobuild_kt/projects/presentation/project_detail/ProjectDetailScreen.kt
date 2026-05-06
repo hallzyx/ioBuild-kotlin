@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -40,7 +41,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
+import com.example.iobuild_kt.core.extension.shareProject
 import com.example.iobuild_kt.core.i18n.lang
 import com.example.iobuild_kt.core.ui.components.ErrorScreen
 import com.example.iobuild_kt.core.ui.components.LoadingScreen
@@ -69,7 +72,8 @@ fun ProjectDetailScreen(
         )
         is ProjectDetailUiState.Success -> {
             val p = current.project
-            val progress = (p.occupancyRate / 100f).toFloat().coerceIn(0f, 1f)
+                    val progress = (p.occupancyRate / 100f).toFloat().coerceIn(0f, 1f)
+                    val context = LocalContext.current
 
             Scaffold(
                 topBar = {
@@ -117,12 +121,15 @@ fun ProjectDetailScreen(
                     LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth().height(8.dp), trackColor = MaterialTheme.colorScheme.surfaceVariant, strokeCap = StrokeCap.Round)
                     Text("${"%.1f".format(p.occupancyRate)}%", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(24.dp))
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Button(onClick = { onEdit(p.id) }, modifier = Modifier.weight(1f)) {
-                            Icon(Icons.Default.Edit, contentDescription = null); Spacer(Modifier.width(8.dp)); Text(lang("projects.edit_action"))
+                            Icon(Icons.Default.Edit, contentDescription = null); Spacer(Modifier.width(6.dp)); Text(lang("projects.edit_action"))
                         }
                         Button(onClick = { viewModel.deleteProject(p.id) }, modifier = Modifier.weight(1f), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)) {
-                            Icon(Icons.Default.Delete, contentDescription = null); Spacer(Modifier.width(8.dp)); Text(lang("projects.delete_action"))
+                            Icon(Icons.Default.Delete, contentDescription = null); Spacer(Modifier.width(6.dp)); Text(lang("projects.delete_action"))
+                        }
+                        Button(onClick = { shareProject(context, p) }) {
+                            Icon(Icons.Default.Share, contentDescription = null)
                         }
                     }
                 }

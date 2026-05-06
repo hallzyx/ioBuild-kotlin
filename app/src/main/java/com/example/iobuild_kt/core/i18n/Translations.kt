@@ -80,6 +80,7 @@ object Translations {
         "projects.location_label" to "Ubicación",
         "projects.units_label" to "Unidades",
         "projects.no_projects" to "No hay proyectos",
+        "projects.share" to "Compartir",
 
         "clients.title" to "Clientes",
         "clients.new" to "Nuevo Cliente",
@@ -250,6 +251,7 @@ object Translations {
         "projects.location_label" to "Location",
         "projects.units_label" to "Units",
         "projects.no_projects" to "No projects",
+        "projects.share" to "Share",
 
         "clients.title" to "Clients",
         "clients.new" to "New Client",
