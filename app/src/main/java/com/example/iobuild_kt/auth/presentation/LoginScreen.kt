@@ -28,7 +28,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,6 +40,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.iobuild_kt.core.i18n.LocalLanguage
+import com.example.iobuild_kt.core.i18n.lang
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -73,7 +74,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(48.dp))
 
             Text(
-                text = "IoBuild",
+                text = lang("login.title"),
                 style = MaterialTheme.typography.displaySmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
@@ -82,7 +83,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Panel del Constructor",
+                text = lang("login.subtitle"),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -92,8 +93,8 @@ fun LoginScreen(
             OutlinedTextField(
                 value = state.email,
                 onValueChange = viewModel::onEmailChanged,
-                label = { Text("Correo Electrónico") },
-                placeholder = { Text("Ingrese su correo") },
+                label = { Text(lang("login.email")) },
+                placeholder = { Text(lang("login.email_placeholder")) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -105,8 +106,8 @@ fun LoginScreen(
             OutlinedTextField(
                 value = state.password,
                 onValueChange = viewModel::onPasswordChanged,
-                label = { Text("Contraseña") },
-                placeholder = { Text("Ingrese su contraseña") },
+                label = { Text(lang("login.password")) },
+                placeholder = { Text(lang("login.password_placeholder")) },
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 singleLine = true,
@@ -116,7 +117,7 @@ fun LoginScreen(
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
                             imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                            contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
+                            contentDescription = if (passwordVisible) lang("login.hide_password") else lang("login.show_password")
                         )
                     }
                 }
@@ -151,7 +152,7 @@ fun LoginScreen(
                     )
                 } else {
                     Text(
-                        text = "Iniciar Sesión",
+                        text = lang("login.submit"),
                         style = MaterialTheme.typography.titleSmall
                     )
                 }
@@ -160,7 +161,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             TextButton(onClick = { /* TODO: navigate to register */ }) {
-                Text("¿No tienes cuenta? Regístrate")
+                Text(lang("login.no_account"))
             }
 
             Spacer(modifier = Modifier.height(48.dp))
