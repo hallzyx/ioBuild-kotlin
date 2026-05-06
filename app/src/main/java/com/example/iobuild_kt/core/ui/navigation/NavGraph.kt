@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import com.example.iobuild_kt.auth.presentation.LoginScreen
 import com.example.iobuild_kt.core.i18n.LocalLanguage
 import com.example.iobuild_kt.core.ui.components.IoScaffold
+import com.example.iobuild_kt.clients.presentation.client_list.ClientListScreen
 import com.example.iobuild_kt.dashboard.presentation.DashboardScreen
 import com.example.iobuild_kt.projects.presentation.project_detail.ProjectDetailScreen
 import com.example.iobuild_kt.projects.presentation.project_form.ProjectFormScreen
@@ -141,7 +142,7 @@ fun NavGraph(
             // -- PLACEHOLDERS (also wrapped with IoScaffold) --
             composable(Screen.ClientList.route) {
                 IoScaffold(currentRoute = Screen.ClientList.route, currentLang = currentLang, onNavigate = { screen -> navController.navigate(screen.route) }, onLogout = { navController.navigate(Screen.Login.route) { popUpTo(0) { inclusive = true } } }, onLanguageChange = onLanguageChange) {
-                    PlaceholderScreen("Clientes")
+                    ClientListScreen()
                 }
             }
             composable(Screen.DeviceList.route) {
