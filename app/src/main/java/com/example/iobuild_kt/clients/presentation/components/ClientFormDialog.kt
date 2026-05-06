@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.iobuild_kt.core.i18n.lang
 
 data class ClientFormData(
     val fullName: String = "",
@@ -71,19 +72,17 @@ fun ClientFormDialog(
                     .padding(vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                OutlinedTextField(value = fullName, onValueChange = { fullName = it }, label = { Text("Nombre completo") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
-                OutlinedTextField(value = projectName, onValueChange = { projectName = it }, label = { Text("Proyecto") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
-                OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Correo electrónico") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
-                OutlinedTextField(value = phone, onValueChange = { phone = it }, label = { Text("Teléfono") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
-                OutlinedTextField(value = address, onValueChange = { address = it }, label = { Text("Dirección") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
-
-                // Status dropdown
+                OutlinedTextField(value = fullName, onValueChange = { fullName = it }, label = { Text(lang("clients.name")) }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
+                OutlinedTextField(value = projectName, onValueChange = { projectName = it }, label = { Text(lang("clients.project")) }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
+                OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text(lang("clients.email")) }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
+                OutlinedTextField(value = phone, onValueChange = { phone = it }, label = { Text(lang("clients.phone")) }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
+                OutlinedTextField(value = address, onValueChange = { address = it }, label = { Text(lang("clients.address")) }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
                 ExposedDropdownMenuBox(expanded = statusExpanded, onExpandedChange = { statusExpanded = it }) {
                     OutlinedTextField(
                         value = selectedStatus,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Estado de cuenta") },
+                        label = { Text(lang("clients.status")) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = statusExpanded) },
                         modifier = Modifier.menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true).fillMaxWidth(),
                         shape = RoundedCornerShape(8.dp)
@@ -114,11 +113,11 @@ fun ClientFormDialog(
                 enabled = !isSaving && fullName.isNotBlank()
             ) {
                 if (isSaving) CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
-                else Text("Guardar")
+                else Text(lang("clients.save"))
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss, enabled = !isSaving) { Text("Cancelar") }
+            TextButton(onClick = onDismiss, enabled = !isSaving) { Text(lang("clients.cancel")) }
         }
     )
 }

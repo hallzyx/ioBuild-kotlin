@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.iobuild_kt.core.i18n.lang
 
 @Composable
 fun DashboardStatsRow(
@@ -34,15 +35,15 @@ fun DashboardStatsRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             StatCard(
-                title = "Proyectos Activos",
+                title = lang("dashboard.stats.active_projects"),
                 value = "$activeProjects",
-                subtitle = "en total",
+                subtitle = lang("dashboard.stats.total"),
                 modifier = Modifier.weight(1f)
             )
             StatCard(
-                title = "Dispositivos",
+                title = lang("dashboard.stats.devices"),
                 value = "$connectedDevices/$totalDevices",
-                subtitle = "conectados",
+                subtitle = lang("dashboard.stats.connected"),
                 modifier = Modifier.weight(1f)
             )
         }
@@ -52,15 +53,15 @@ fun DashboardStatsRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             StatCard(
-                title = "Unidades Ocupadas",
+                title = lang("dashboard.stats.occupied_units"),
                 value = "$occupiedUnits/$totalUnits",
-                subtitle = "${"%.1f".format(occupancyRate)}% ocupación",
+                subtitle = "${"%.1f".format(occupancyRate)}% ${lang("dashboard.stats.occupancy")}",
                 modifier = Modifier.weight(1f)
             )
             StatCard(
-                title = "Eficiencia Energética",
+                title = lang("dashboard.stats.energy"),
                 value = "${"%.0f".format(energyEfficiency)}%",
-                subtitle = "promedio general",
+                subtitle = lang("dashboard.stats.avg"),
                 modifier = Modifier.weight(1f)
             )
         }

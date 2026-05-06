@@ -13,6 +13,8 @@ import com.example.iobuild_kt.core.ui.components.IoScaffold
 import com.example.iobuild_kt.clients.presentation.client_list.ClientListScreen
 import com.example.iobuild_kt.dashboard.presentation.DashboardScreen
 import com.example.iobuild_kt.devices.presentation.device_list.DeviceListScreen
+import com.example.iobuild_kt.profile.presentation.ProfileScreen
+import com.example.iobuild_kt.settings.presentation.SettingsScreen
 import com.example.iobuild_kt.subscription.presentation.SubscriptionScreen
 import com.example.iobuild_kt.projects.presentation.project_detail.ProjectDetailScreen
 import com.example.iobuild_kt.projects.presentation.project_form.ProjectFormScreen
@@ -159,12 +161,12 @@ fun NavGraph(
             }
             composable(Screen.Profile.route) {
                 IoScaffold(currentRoute = Screen.Profile.route, currentLang = currentLang, onNavigate = { screen -> navController.navigate(screen.route) }, onLogout = { navController.navigate(Screen.Login.route) { popUpTo(0) { inclusive = true } } }, onLanguageChange = onLanguageChange) {
-                    PlaceholderScreen("Perfil")
+                    ProfileScreen()
                 }
             }
             composable(Screen.Settings.route) {
                 IoScaffold(currentRoute = Screen.Settings.route, currentLang = currentLang, onNavigate = { screen -> navController.navigate(screen.route) }, onLogout = { navController.navigate(Screen.Login.route) { popUpTo(0) { inclusive = true } } }, onLanguageChange = onLanguageChange) {
-                    PlaceholderScreen("Configuración")
+                    SettingsScreen()
                 }
             }
         }

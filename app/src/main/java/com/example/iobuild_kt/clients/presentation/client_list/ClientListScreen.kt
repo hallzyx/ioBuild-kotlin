@@ -37,6 +37,7 @@ import com.example.iobuild_kt.clients.presentation.client_detail.ClientDetailDia
 import com.example.iobuild_kt.clients.presentation.components.ClientCard
 import com.example.iobuild_kt.clients.presentation.components.ClientFormData
 import com.example.iobuild_kt.clients.presentation.components.ClientFormDialog
+import com.example.iobuild_kt.core.i18n.lang
 import com.example.iobuild_kt.core.ui.components.ErrorScreen
 import com.example.iobuild_kt.core.ui.components.LoadingScreen
 import org.koin.androidx.compose.koinViewModel
@@ -67,7 +68,7 @@ fun ClientListScreen(
                 Column(Modifier.fillMaxSize().padding(padding)) {
                     OutlinedTextField(
                         value = searchQuery, onValueChange = viewModel::setSearchQuery,
-                        placeholder = { Text("Buscar cliente...") },
+                        placeholder = { Text(lang("clients.search")) },
                         leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                         trailingIcon = {
                             if (searchQuery.isNotEmpty()) IconButton(onClick = { viewModel.setSearchQuery("") }) {
@@ -81,7 +82,7 @@ fun ClientListScreen(
 
                     if (filtered.isEmpty()) {
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text("No se encontraron clientes", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(lang("clients.no_results"), color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     } else {
                         LazyColumn(
@@ -101,7 +102,7 @@ fun ClientListScreen(
 
     if (showCreate) {
         ClientFormDialog(
-            title = "Nuevo Cliente", initial = ClientFormData(),
+            title = lang("clients.new"), initial = ClientFormData(),
             onDismiss = { showCreate = false },
             onSave = { viewModel.createClient(it); showCreate = false }
         )
@@ -109,7 +110,7 @@ fun ClientListScreen(
 
     editingClient?.let { c ->
         ClientFormDialog(
-            title = "Editar Cliente",
+            title = lang("clients.edit"),
             initial = ClientFormData(
                 fullName = c.fullName, projectName = c.projectName, projectId = c.projectId,
                 accountStatement = c.accountStatement, email = c.email,

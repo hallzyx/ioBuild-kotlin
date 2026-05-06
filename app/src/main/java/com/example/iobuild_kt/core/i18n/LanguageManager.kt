@@ -15,7 +15,7 @@ class LanguageManager(private val context: Context) {
     }
 
     val currentLanguage: Flow<String> = context.langStore.data.map { prefs ->
-        prefs[KEY_LANG] ?: "es"
+        prefs[KEY_LANG] ?: "en"
     }
 
     suspend fun setLanguage(lang: String) {

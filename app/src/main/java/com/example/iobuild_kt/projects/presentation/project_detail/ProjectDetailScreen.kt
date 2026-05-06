@@ -41,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.example.iobuild_kt.core.i18n.lang
 import com.example.iobuild_kt.core.ui.components.ErrorScreen
 import com.example.iobuild_kt.core.ui.components.LoadingScreen
 
@@ -107,21 +108,21 @@ fun ProjectDetailScreen(
                     Text(p.description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(16.dp))
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        StatBox("Ubicación", p.location, Modifier.weight(1f))
-                        StatBox("Unidades", "${p.occupiedUnits}/${p.totalUnits}", Modifier.weight(1f))
+                        StatBox(lang("projects.location_label"), p.location, Modifier.weight(1f))
+                        StatBox(lang("projects.units_label"), "${p.occupiedUnits}/${p.totalUnits}", Modifier.weight(1f))
                     }
                     Spacer(Modifier.height(16.dp))
-                    Text("Ocupación", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                    Text(lang("projects.occupancy_label"), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.height(8.dp))
                     LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth().height(8.dp), trackColor = MaterialTheme.colorScheme.surfaceVariant, strokeCap = StrokeCap.Round)
                     Text("${"%.1f".format(p.occupancyRate)}%", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(24.dp))
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         Button(onClick = { onEdit(p.id) }, modifier = Modifier.weight(1f)) {
-                            Icon(Icons.Default.Edit, contentDescription = null); Spacer(Modifier.width(8.dp)); Text("Editar")
+                            Icon(Icons.Default.Edit, contentDescription = null); Spacer(Modifier.width(8.dp)); Text(lang("projects.edit_action"))
                         }
                         Button(onClick = { viewModel.deleteProject(p.id) }, modifier = Modifier.weight(1f), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)) {
-                            Icon(Icons.Default.Delete, contentDescription = null); Spacer(Modifier.width(8.dp)); Text("Eliminar")
+                            Icon(Icons.Default.Delete, contentDescription = null); Spacer(Modifier.width(8.dp)); Text(lang("projects.delete_action"))
                         }
                     }
                 }

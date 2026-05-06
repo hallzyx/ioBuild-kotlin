@@ -42,6 +42,18 @@ import com.example.iobuild_kt.subscription.data.repository.SubscriptionRepositor
 import com.example.iobuild_kt.subscription.domain.repository.SubscriptionRepository
 import com.example.iobuild_kt.subscription.domain.usecase.GetPlansUseCase
 import com.example.iobuild_kt.subscription.domain.usecase.GetSubscriptionUseCase
+import com.example.iobuild_kt.profile.data.api.ProfileApiService
+import com.example.iobuild_kt.profile.data.repository.ProfileRepositoryImpl
+import com.example.iobuild_kt.profile.domain.repository.ProfileRepository
+import com.example.iobuild_kt.profile.domain.usecase.GetProfileUseCase
+import com.example.iobuild_kt.profile.domain.usecase.UpdateProfileUseCase
+import com.example.iobuild_kt.profile.presentation.ProfileViewModel
+import com.example.iobuild_kt.settings.data.api.SettingsApiService
+import com.example.iobuild_kt.settings.data.repository.SettingsRepositoryImpl
+import com.example.iobuild_kt.settings.domain.repository.SettingsRepository
+import com.example.iobuild_kt.settings.domain.usecase.ChangePasswordUseCase
+import com.example.iobuild_kt.settings.domain.usecase.SetSecondEmailUseCase
+import com.example.iobuild_kt.settings.presentation.SettingsViewModel
 import com.example.iobuild_kt.subscription.presentation.SubscriptionViewModel
 import com.example.iobuild_kt.projects.presentation.project_form.ProjectFormViewModel
 import com.example.iobuild_kt.projects.presentation.project_list.ProjectListViewModel
@@ -102,4 +114,18 @@ val subscriptionModule = module {
     viewModelOf(::SubscriptionViewModel)
 }
 
-val appModule = listOf(networkModule, dataModule, authModule, analyticsModule, projectsModule, clientsModule, devicesModule, subscriptionModule)
+val profileModule = module {
+    single<ProfileApiService> { get<Retrofit>().create(ProfileApiService::class.java) }
+    single<ProfileRepository> { ProfileRepositoryImpl(get()) }
+    factory { GetProfileUseCase(get()) }; factory { UpdateProfileUseCase(get()) }
+    viewModelOf(::ProfileViewModel)
+}
+
+val settingsModule = module {
+    single<SettingsApiService> { get<Retrofit>().create(SettingsApiService::class.java) }
+    single<SettingsRepository> { SettingsRepositoryImpl(get()) }
+    factory { ChangePasswordUseCase(get()) }; factory { SetSecondEmailUseCase(get()) }
+    viewModelOf(::SettingsViewModel)
+}
+
+val appModule = listOf(networkModule, dataModule, authModule, analyticsModule, projectsModule, clientsModule, devicesModule, subscriptionModule, profileModule, settingsModule)

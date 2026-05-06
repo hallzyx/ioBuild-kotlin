@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.iobuild_kt.core.i18n.lang
 import com.example.iobuild_kt.core.ui.components.ErrorScreen
 import com.example.iobuild_kt.core.ui.components.LoadingScreen
 import com.example.iobuild_kt.devices.domain.model.Device
@@ -58,7 +59,7 @@ fun DeviceListScreen(
             ) { padding ->
                 if (current.devices.isEmpty()) {
                     Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                        Text("No hay dispositivos", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(lang("devices.no_devices"), color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 } else {
                     LazyColumn(
@@ -83,7 +84,7 @@ fun DeviceListScreen(
     // Create dialog
     if (showCreate) {
         DeviceFormDialog(
-            title = "Nuevo Dispositivo", initial = DeviceFormData(),
+            title = lang("devices.new"), initial = DeviceFormData(),
             onDismiss = { showCreate = false },
             onSave = { viewModel.createDevice(it); showCreate = false }
         )
@@ -92,7 +93,7 @@ fun DeviceListScreen(
     // Edit dialog
     editingDevice?.let { d ->
         DeviceFormDialog(
-            title = "Editar Dispositivo",
+            title = lang("devices.edit"),
             initial = DeviceFormData(d.name, d.type, d.location, d.macAddress, d.status),
             onDismiss = { editingDevice = null },
             onSave = { viewModel.updateDevice(d.id, it); editingDevice = null }
@@ -103,15 +104,15 @@ fun DeviceListScreen(
     deletingDevice?.let { d ->
         AlertDialog(
             onDismissRequest = { deletingDevice = null },
-            title = { Text("Eliminar Dispositivo") },
-            text = { Text("¿Estás seguro de eliminar '${d.name}'?") },
+            title = { Text(lang("devices.delete")) },
+            text = { Text("${lang("devices.delete_confirm")} '${d.name}'?") },
             confirmButton = {
                 TextButton(onClick = { viewModel.deleteDevice(d.id); deletingDevice = null }) {
-                    Text("Eliminar", color = MaterialTheme.colorScheme.error)
+                    Text(lang("general.delete"), color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
-                TextButton(onClick = { deletingDevice = null }) { Text("Cancelar") }
+                TextButton(onClick = { deletingDevice = null }) { Text(lang("general.cancel")) }
             }
         )
     }

@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.iobuild_kt.core.i18n.lang
 
 data class DeviceFormData(
     val name: String = "",
@@ -70,11 +71,10 @@ fun DeviceFormDialog(
                 modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Nombre") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
+                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text(lang("devices.name")) }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
 
-                // Type dropdown
                 ExposedDropdownMenuBox(expanded = typeExpanded, onExpandedChange = { typeExpanded = it }) {
-                    OutlinedTextField(value = selectedType, onValueChange = {}, readOnly = true, label = { Text("Tipo") }, trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = typeExpanded) }, modifier = Modifier.menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true).fillMaxWidth(), shape = RoundedCornerShape(8.dp))
+                    OutlinedTextField(value = selectedType, onValueChange = {}, readOnly = true, label = { Text(lang("devices.type")) }, trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = typeExpanded) }, modifier = Modifier.menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true).fillMaxWidth(), shape = RoundedCornerShape(8.dp))
                     ExposedDropdownMenu(expanded = typeExpanded, onDismissRequest = { typeExpanded = false }) {
                         deviceTypes.forEach { option ->
                             DropdownMenuItem(text = { Text(option) }, onClick = { selectedType = option; typeExpanded = false })
@@ -82,12 +82,10 @@ fun DeviceFormDialog(
                     }
                 }
 
-                OutlinedTextField(value = location, onValueChange = { location = it }, label = { Text("Ubicación") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
-                OutlinedTextField(value = mac, onValueChange = { mac = it }, label = { Text("Dirección MAC") }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
-
-                // Status dropdown
+                OutlinedTextField(value = location, onValueChange = { location = it }, label = { Text(lang("devices.location")) }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
+                OutlinedTextField(value = mac, onValueChange = { mac = it }, label = { Text(lang("devices.mac")) }, singleLine = true, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(8.dp))
                 ExposedDropdownMenuBox(expanded = statusExpanded, onExpandedChange = { statusExpanded = it }) {
-                    OutlinedTextField(value = selectedStatus, onValueChange = {}, readOnly = true, label = { Text("Estado") }, trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = statusExpanded) }, modifier = Modifier.menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true).fillMaxWidth(), shape = RoundedCornerShape(8.dp))
+                    OutlinedTextField(value = selectedStatus, onValueChange = {}, readOnly = true, label = { Text(lang("devices.status")) }, trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = statusExpanded) }, modifier = Modifier.menuAnchor(type = ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true).fillMaxWidth(), shape = RoundedCornerShape(8.dp))
                     ExposedDropdownMenu(expanded = statusExpanded, onDismissRequest = { statusExpanded = false }) {
                         statusOptions.forEach { option ->
                             DropdownMenuItem(text = { Text(option) }, onClick = { selectedStatus = option; statusExpanded = false })
@@ -106,11 +104,11 @@ fun DeviceFormDialog(
                 enabled = !isSaving && name.isNotBlank()
             ) {
                 if (isSaving) CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
-                else Text("Guardar")
+                else Text(lang("devices.save"))
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss, enabled = !isSaving) { Text("Cancelar") }
+            TextButton(onClick = onDismiss, enabled = !isSaving) { Text(lang("devices.cancel")) }
         }
     )
 }

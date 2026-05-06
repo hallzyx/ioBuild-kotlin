@@ -1,10 +1,8 @@
 package com.example.iobuild_kt.core.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +16,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Group
@@ -27,7 +24,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Quiz
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -43,8 +39,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,16 +53,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.iobuild_kt.core.data.TokenManager
 import com.example.iobuild_kt.core.i18n.Translations
 import com.example.iobuild_kt.core.i18n.lang
 import com.example.iobuild_kt.core.ui.navigation.Screen
+import com.example.iobuild_kt.profile.domain.repository.ProfileRepository
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 
-data class NavItem(
-    val screen: Screen,
-    val icon: ImageVector,
-    val labelKey: String
-)
+data class NavItem(val screen: Screen, val icon: ImageVector, val labelKey: String)
 
 private val builderNavItems = listOf(
     NavItem(Screen.Dashboard, Icons.Default.Dashboard, "nav.home"),
@@ -79,8 +79,6 @@ private val builderNavItems = listOf(
 fun IoScaffold(
     currentRoute: String?,
     currentLang: String,
-    userName: String = "Constructor",
-    userPhotoUrl: String? = null,
     onNavigate: (Screen) -> Unit,
     onLogout: () -> Unit,
     onLanguageChange: (String) -> Unit,
@@ -89,60 +87,53 @@ fun IoScaffold(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
+    // Load real profile data
+    val tokenManager: TokenManager = koinInject()
+    val profileRepository: ProfileRepository = koinInject()
+    var userName by remember { mutableStateOf("") }
+    var userPhotoUrl by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(Unit) {
+        val userId = tokenManager.userId.firstOrNull()
+        if (userId != null) {
+            profileRepository.getProfile(userId).onSuccess { profile ->
+                userName = profile.name
+                userPhotoUrl = profile.photoUrl.ifEmpty { null }
+            }
+        }
+        if (userName.isBlank()) userName = "Constructor"
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet(modifier = Modifier.width(300.dp)) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    // User header
+                Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.primary)
-                            .padding(24.dp),
+                        modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.primary).padding(24.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             AsyncImage(
                                 model = userPhotoUrl,
-                                contentDescription = "Foto de perfil",
-                                modifier = Modifier
-                                    .size(72.dp)
-                                    .clip(CircleShape),
+                                contentDescription = null,
+                                modifier = Modifier.size(72.dp).clip(CircleShape),
                                 contentScale = ContentScale.Crop
                             )
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Text(
-                                text = userName,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(
-                                text = lang("role.builder"),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
-                            )
+                            Spacer(Modifier.height(12.dp))
+                            Text(userName, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold)
+                            Text(lang("role.builder"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f))
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    // Navigation items
+                    Spacer(Modifier.height(8.dp))
                     builderNavItems.forEach { item ->
                         val isSelected = currentRoute == item.screen.route
                         NavigationDrawerItem(
                             icon = { Icon(item.icon, contentDescription = null) },
                             label = { Text(lang(item.labelKey)) },
                             selected = isSelected,
-                            onClick = {
-                                onNavigate(item.screen)
-                                scope.launch { drawerState.close() }
-                            },
+                            onClick = { onNavigate(item.screen); scope.launch { drawerState.close() } },
                             modifier = Modifier.padding(horizontal = 12.dp),
                             colors = NavigationDrawerItemDefaults.colors(
                                 selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -152,25 +143,14 @@ fun IoScaffold(
                         )
                     }
 
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    // Language toggle
-                    Text(
-                        text = lang("nav.language"),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
-                    )
-
+                    Spacer(Modifier.weight(1f))
+                    Text(lang("nav.language"), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp))
                     Translations.getAvailableLanguages().forEach { (code, label) ->
                         NavigationDrawerItem(
                             icon = { Icon(Icons.Default.Language, contentDescription = null) },
                             label = { Text(label) },
                             selected = currentLang == code,
-                            onClick = {
-                                onLanguageChange(code)
-                                scope.launch { drawerState.close() }
-                            },
+                            onClick = { onLanguageChange(code); scope.launch { drawerState.close() } },
                             modifier = Modifier.padding(horizontal = 12.dp),
                             colors = NavigationDrawerItemDefaults.colors(
                                 selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -180,7 +160,6 @@ fun IoScaffold(
                         )
                     }
 
-                    // Logout
                     NavigationDrawerItem(
                         icon = { Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null) },
                         label = { Text(lang("nav.logout")) },
@@ -195,29 +174,17 @@ fun IoScaffold(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = {
-                        Text(
-                            text = "IoBuild",
-                            fontWeight = FontWeight.Bold
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menú")
-                        }
-                    },
+                    title = { Text("IoBuild", fontWeight = FontWeight.Bold) },
+                    navigationIcon = { IconButton(onClick = { scope.launch { drawerState.open() } }) { Icon(Icons.Default.Menu, contentDescription = null) } },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                        navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                        actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+                        navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 )
             }
         ) { padding ->
-            Box(modifier = Modifier.padding(padding)) {
-                content()
-            }
+            Box(modifier = Modifier.padding(padding)) { content() }
         }
     }
 }

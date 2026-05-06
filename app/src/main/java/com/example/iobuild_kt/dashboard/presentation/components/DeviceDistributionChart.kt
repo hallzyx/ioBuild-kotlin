@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.iobuild_kt.core.i18n.lang
 
 private val chartColors = listOf(
     Color(0xFF10B981),
@@ -54,7 +55,7 @@ fun DeviceDistributionChart(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "Distribución de Dispositivos",
+                text = lang("dashboard.chart.device_distribution"),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )

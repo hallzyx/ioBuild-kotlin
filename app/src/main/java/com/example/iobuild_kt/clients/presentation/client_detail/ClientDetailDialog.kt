@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.iobuild_kt.clients.domain.model.Client
+import com.example.iobuild_kt.core.i18n.lang
 
 @Composable
 fun ClientDetailDialog(
@@ -43,26 +44,26 @@ fun ClientDetailDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Row {
-                    Text("Estado: ", fontWeight = FontWeight.Medium)
+                    Text("${lang("clients.status")}: ", fontWeight = FontWeight.Medium)
                     Text(client.accountStatement, color = statusColor, fontWeight = FontWeight.Bold)
                 }
-                InfoRow("Correo", client.email)
-                InfoRow("Teléfono", client.phoneNumber)
-                InfoRow("Dirección", client.address)
-                InfoRow("Proyecto", client.projectName)
+                InfoRow(lang("clients.email"), client.email)
+                InfoRow(lang("clients.phone"), client.phoneNumber)
+                InfoRow(lang("clients.address"), client.address)
+                InfoRow(lang("clients.project"), client.projectName)
             }
         },
         confirmButton = {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = onEdit, modifier = Modifier.weight(1f)) { Text("Editar") }
+                Button(onClick = onEdit, modifier = Modifier.weight(1f)) { Text(lang("general.edit")) }
                 Button(
                     onClick = onDelete, modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                ) { Text("Eliminar") }
+                ) { Text(lang("general.delete")) }
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cerrar") }
+            TextButton(onClick = onDismiss) { Text(lang("clients.close")) }
         }
     )
 }

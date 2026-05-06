@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.iobuild_kt.core.i18n.lang
 import com.example.iobuild_kt.core.ui.components.LoadingScreen
 import com.example.iobuild_kt.core.ui.components.ErrorScreen
 import com.example.iobuild_kt.subscription.presentation.components.PlanCard
@@ -48,8 +49,9 @@ fun SubscriptionScreen(
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
+    val soonText = lang("subscription.soon")
     val comingSoon: () -> Unit = {
-        scope.launch { snackbar.showSnackbar("Esta característica estará disponible muy pronto") }
+        scope.launch { snackbar.showSnackbar(soonText) }
         Unit
     }
 
@@ -65,7 +67,7 @@ fun SubscriptionScreen(
                 ) {
                     // Title
                     item {
-                        Text("Mi Suscripción", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                        Text(lang("subscription.title"), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
                     }
 
                     // Current subscription
@@ -90,9 +92,9 @@ fun SubscriptionScreen(
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
                             ) {
                                 Column(Modifier.padding(16.dp)) {
-                                    Text("No tienes una suscripción activa", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+                                    Text(lang("subscription.no_subscription"), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
                                     Spacer(Modifier.height(8.dp))
-                                    Text("Selecciona un plan de los disponibles para empezar.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    Text(lang("subscription.no_subscription_desc"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 }
                             }
                         }
@@ -100,7 +102,7 @@ fun SubscriptionScreen(
 
                     // Available plans
                     item {
-                        Text("Planes Disponibles", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                        Text(lang("subscription.plans"), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     }
 
                     item {
@@ -139,7 +141,7 @@ private fun CurrentPlanCard(
         else -> Color(0xFF6B7280)
     }
     val statusText = when (status) {
-        "active" -> "Activo"; "pending" -> "Pendiente"
+        "active" -> lang("subscription.status_active"); "pending" -> "Pendiente"
         "cancelled" -> "Cancelado"; "expired" -> "Expirado"
         else -> status
     }
@@ -151,11 +153,11 @@ private fun CurrentPlanCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(Modifier.padding(16.dp)) {
-            Text("Plan Actual", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(lang("subscription.current_plan"), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(4.dp))
             Text(plan.name, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(4.dp))
-            Text("S/ ${"%.0f".format(plan.price)} / mes", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+            Text("${lang("subscription.price")} ${"%.0f".format(plan.price)} / ${lang("subscription.per_month")}", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
             Spacer(Modifier.height(8.dp))
             Text(statusText, color = statusColor, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
             if (startDate.isNotBlank() && endDate.isNotBlank()) {
@@ -163,8 +165,8 @@ private fun CurrentPlanCard(
             }
             Spacer(Modifier.height(12.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = onChangePlan, modifier = Modifier.weight(1f)) { Text("Cambiar Plan") }
-                Button(onClick = onCancel, modifier = Modifier.weight(1f), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)) { Text("Cancelar") }
+                Button(onClick = onChangePlan, modifier = Modifier.weight(1f)) { Text(lang("subscription.change_plan")) }
+                Button(onClick = onCancel, modifier = Modifier.weight(1f), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)) { Text(lang("subscription.cancel")) }
             }
         }
     }

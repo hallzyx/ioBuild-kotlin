@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.iobuild_kt.core.i18n.lang
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +46,7 @@ fun ProjectFormScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (state.isEdit) "Editar Proyecto" else "Nuevo Proyecto", fontWeight = FontWeight.Bold) },
+                title = { Text(if (state.isEdit) lang("projects.edit") else lang("projects.new"), fontWeight = FontWeight.Bold) },
                 navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null) } },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
@@ -60,32 +61,22 @@ fun ProjectFormScreen(
         ) {
             if (state.isLoading) { CircularProgressIndicator(Modifier.padding(32.dp)); return@Column }
 
-            OutlinedTextField(value = state.name, onValueChange = viewModel::onNameChange, label = { Text("Nombre") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
+            OutlinedTextField(value = state.name, onValueChange = viewModel::onNameChange, label = { Text(lang("projects.name")) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
             Spacer(Modifier.height(12.dp))
-            OutlinedTextField(value = state.description, onValueChange = viewModel::onDescriptionChange, label = { Text("Descripción") }, modifier = Modifier.fillMaxWidth().height(100.dp), shape = RoundedCornerShape(12.dp))
+            OutlinedTextField(value = state.description, onValueChange = viewModel::onDescriptionChange, label = { Text(lang("projects.description")) }, modifier = Modifier.fillMaxWidth().height(100.dp), shape = RoundedCornerShape(12.dp))
             Spacer(Modifier.height(12.dp))
-            OutlinedTextField(value = state.location, onValueChange = viewModel::onLocationChange, label = { Text("Ubicación") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
+            OutlinedTextField(value = state.location, onValueChange = viewModel::onLocationChange, label = { Text(lang("projects.location")) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
             Spacer(Modifier.height(12.dp))
-            OutlinedTextField(value = state.totalUnits, onValueChange = viewModel::onTotalUnitsChange, label = { Text("Unidades Totales") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
+            OutlinedTextField(value = state.totalUnits, onValueChange = viewModel::onTotalUnitsChange, label = { Text(lang("projects.total_units")) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
             Spacer(Modifier.height(12.dp))
-            OutlinedTextField(value = state.occupiedUnits, onValueChange = viewModel::onOccupiedUnitsChange, label = { Text("Unidades Ocupadas") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
+            OutlinedTextField(value = state.occupiedUnits, onValueChange = viewModel::onOccupiedUnitsChange, label = { Text(lang("projects.occupied_units")) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
             Spacer(Modifier.height(12.dp))
-            OutlinedTextField(value = state.imageUrl, onValueChange = viewModel::onImageUrlChange, label = { Text("URL de Imagen") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
-
-            if (state.error != null) {
-                Spacer(Modifier.height(12.dp))
-                Text(state.error!!, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-            }
-
+            OutlinedTextField(value = state.imageUrl, onValueChange = viewModel::onImageUrlChange, label = { Text(lang("projects.image_url")) }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp), singleLine = true)
+            if (state.error != null) { Spacer(Modifier.height(12.dp)); Text(state.error!!, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall) }
             Spacer(Modifier.height(24.dp))
-            Button(
-                onClick = viewModel::save,
-                enabled = !state.isSaving,
-                modifier = Modifier.fillMaxWidth().height(50.dp),
-                shape = RoundedCornerShape(12.dp)
-            ) {
+            Button(onClick = viewModel::save, enabled = !state.isSaving, modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(12.dp)) {
                 if (state.isSaving) CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
-                else Text("Guardar", fontWeight = FontWeight.Bold)
+                else Text(lang("projects.save"), fontWeight = FontWeight.Bold)
             }
         }
     }
