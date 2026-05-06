@@ -9,7 +9,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.iobuild_kt.auth.presentation.LoginScreen
 import com.example.iobuild_kt.core.i18n.LocalLanguage
+import com.example.iobuild_kt.core.ui.components.IoScaffold
 import com.example.iobuild_kt.dashboard.presentation.DashboardScreen
+import com.example.iobuild_kt.projects.presentation.project_detail.ProjectDetailScreen
+import com.example.iobuild_kt.projects.presentation.project_form.ProjectFormScreen
+import com.example.iobuild_kt.projects.presentation.project_list.ProjectListScreen
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun NavGraph(
@@ -22,6 +27,7 @@ fun NavGraph(
             navController = navController,
             startDestination = Screen.Login.route
         ) {
+            // -- PUBLIC --
             composable(Screen.Login.route) {
                 LoginScreen(
                     onLoginSuccess = {
@@ -32,19 +38,73 @@ fun NavGraph(
                 )
             }
 
+            // -- AUTHENTICATED (wrapped with IoScaffold) --
+
             composable(Screen.Dashboard.route) {
-                DashboardScreen()
+                IoScaffold(
+                    currentRoute = Screen.Dashboard.route,
+                    currentLang = currentLang,
+                    onNavigate = { screen -> navController.navigate(screen.route) },
+                    onLogout = {
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    },
+                    onLanguageChange = onLanguageChange
+                ) {
+                    DashboardScreen()
+                }
             }
 
             composable(Screen.ProjectList.route) {
-                PlaceholderScreen("Proyectos")
+                IoScaffold(
+                    currentRoute = Screen.ProjectList.route,
+                    currentLang = currentLang,
+                    onNavigate = { screen -> navController.navigate(screen.route) },
+                    onLogout = {
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    },
+                    onLanguageChange = onLanguageChange
+                ) {
+                    ProjectListScreen(
+                        onProjectClick = { id ->
+                            navController.navigate(Screen.ProjectDetail.createRoute(id))
+                        },
+                        onCreateClick = {
+                            navController.navigate(Screen.ProjectForm.route)
+                        }
+                    )
+                }
             }
 
             composable(
                 route = Screen.ProjectDetail.route,
                 arguments = listOf(navArgument("projectId") { type = NavType.IntType })
-            ) {
-                PlaceholderScreen("Detalle del Proyecto")
+            ) { backStackEntry ->
+                val projectId = backStackEntry.arguments?.getInt("projectId") ?: return@composable
+                val vm = koinViewModel<com.example.iobuild_kt.projects.presentation.project_detail.ProjectDetailViewModel>()
+                IoScaffold(
+                    currentRoute = Screen.ProjectList.route,
+                    currentLang = currentLang,
+                    onNavigate = { screen -> navController.navigate(screen.route) },
+                    onLogout = {
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    },
+                    onLanguageChange = onLanguageChange
+                ) {
+                    ProjectDetailScreen(
+                        projectId = projectId,
+                        onBack = { navController.popBackStack() },
+                        onEdit = { id ->
+                            navController.navigate(Screen.ProjectForm.createRoute(id))
+                        },
+                        viewModel = vm
+                    )
+                }
             }
 
             composable(
@@ -55,35 +115,54 @@ fun NavGraph(
                         defaultValue = -1
                     }
                 )
-            ) {
-                PlaceholderScreen("Formulario Proyecto")
+            ) { backStackEntry ->
+                val projectId = backStackEntry.arguments?.getInt("projectId")
+                val actualId = if (projectId != null && projectId > 0) projectId else null
+                val vm = koinViewModel<com.example.iobuild_kt.projects.presentation.project_form.ProjectFormViewModel>()
+                IoScaffold(
+                    currentRoute = Screen.ProjectList.route,
+                    currentLang = currentLang,
+                    onNavigate = { screen -> navController.navigate(screen.route) },
+                    onLogout = {
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    },
+                    onLanguageChange = onLanguageChange
+                ) {
+                    ProjectFormScreen(
+                        projectId = actualId,
+                        onBack = { navController.popBackStack() },
+                        viewModel = vm
+                    )
+                }
             }
 
+            // -- PLACEHOLDERS (also wrapped with IoScaffold) --
             composable(Screen.ClientList.route) {
-                PlaceholderScreen("Clientes")
+                IoScaffold(currentRoute = Screen.ClientList.route, currentLang = currentLang, onNavigate = { screen -> navController.navigate(screen.route) }, onLogout = { navController.navigate(Screen.Login.route) { popUpTo(0) { inclusive = true } } }, onLanguageChange = onLanguageChange) {
+                    PlaceholderScreen("Clientes")
+                }
             }
-
-            composable(
-                route = Screen.ClientDetail.route,
-                arguments = listOf(navArgument("clientId") { type = NavType.IntType })
-            ) {
-                PlaceholderScreen("Detalle del Cliente")
-            }
-
             composable(Screen.DeviceList.route) {
-                PlaceholderScreen("Dispositivos")
+                IoScaffold(currentRoute = Screen.DeviceList.route, currentLang = currentLang, onNavigate = { screen -> navController.navigate(screen.route) }, onLogout = { navController.navigate(Screen.Login.route) { popUpTo(0) { inclusive = true } } }, onLanguageChange = onLanguageChange) {
+                    PlaceholderScreen("Dispositivos")
+                }
             }
-
             composable(Screen.Subscription.route) {
-                PlaceholderScreen("Suscripción")
+                IoScaffold(currentRoute = Screen.Subscription.route, currentLang = currentLang, onNavigate = { screen -> navController.navigate(screen.route) }, onLogout = { navController.navigate(Screen.Login.route) { popUpTo(0) { inclusive = true } } }, onLanguageChange = onLanguageChange) {
+                    PlaceholderScreen("Suscripción")
+                }
             }
-
             composable(Screen.Profile.route) {
-                PlaceholderScreen("Perfil")
+                IoScaffold(currentRoute = Screen.Profile.route, currentLang = currentLang, onNavigate = { screen -> navController.navigate(screen.route) }, onLogout = { navController.navigate(Screen.Login.route) { popUpTo(0) { inclusive = true } } }, onLanguageChange = onLanguageChange) {
+                    PlaceholderScreen("Perfil")
+                }
             }
-
             composable(Screen.Settings.route) {
-                PlaceholderScreen("Configuración")
+                IoScaffold(currentRoute = Screen.Settings.route, currentLang = currentLang, onNavigate = { screen -> navController.navigate(screen.route) }, onLogout = { navController.navigate(Screen.Login.route) { popUpTo(0) { inclusive = true } } }, onLanguageChange = onLanguageChange) {
+                    PlaceholderScreen("Configuración")
+                }
             }
         }
     }
