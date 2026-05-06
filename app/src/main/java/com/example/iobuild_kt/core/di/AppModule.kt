@@ -26,6 +26,15 @@ import com.example.iobuild_kt.clients.domain.usecase.GetClientByIdUseCase
 import com.example.iobuild_kt.clients.domain.usecase.GetClientsUseCase
 import com.example.iobuild_kt.clients.domain.usecase.UpdateClientUseCase
 import com.example.iobuild_kt.clients.presentation.client_list.ClientListViewModel
+import com.example.iobuild_kt.devices.data.api.DeviceApiService
+import com.example.iobuild_kt.devices.data.repository.DeviceRepositoryImpl
+import com.example.iobuild_kt.devices.domain.repository.DeviceRepository
+import com.example.iobuild_kt.devices.domain.usecase.CreateDeviceUseCase
+import com.example.iobuild_kt.devices.domain.usecase.DeleteDeviceUseCase
+import com.example.iobuild_kt.devices.domain.usecase.GetDeviceByIdUseCase
+import com.example.iobuild_kt.devices.domain.usecase.GetDevicesUseCase
+import com.example.iobuild_kt.devices.domain.usecase.UpdateDeviceUseCase
+import com.example.iobuild_kt.devices.presentation.device_list.DeviceListViewModel
 import com.example.iobuild_kt.projects.presentation.project_detail.ProjectDetailViewModel
 import com.example.iobuild_kt.projects.presentation.project_form.ProjectFormViewModel
 import com.example.iobuild_kt.projects.presentation.project_list.ProjectListViewModel
@@ -70,4 +79,12 @@ val clientsModule = module {
     viewModelOf(::ClientListViewModel)
 }
 
-val appModule = listOf(networkModule, dataModule, authModule, analyticsModule, projectsModule, clientsModule)
+val devicesModule = module {
+    single<DeviceApiService> { get<Retrofit>().create(DeviceApiService::class.java) }
+    single<DeviceRepository> { DeviceRepositoryImpl(get()) }
+    factory { GetDevicesUseCase(get()) }; factory { GetDeviceByIdUseCase(get()) }
+    factory { CreateDeviceUseCase(get()) }; factory { UpdateDeviceUseCase(get()) }; factory { DeleteDeviceUseCase(get()) }
+    viewModelOf(::DeviceListViewModel)
+}
+
+val appModule = listOf(networkModule, dataModule, authModule, analyticsModule, projectsModule, clientsModule, devicesModule)
