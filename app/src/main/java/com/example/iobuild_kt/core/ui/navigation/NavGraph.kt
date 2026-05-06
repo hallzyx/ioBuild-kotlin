@@ -25,12 +25,13 @@ import org.koin.androidx.compose.koinViewModel
 fun NavGraph(
     navController: NavHostController,
     currentLang: String,
-    onLanguageChange: (String) -> Unit
+    onLanguageChange: (String) -> Unit,
+    startDestination: String = Screen.Login.route
 ) {
     CompositionLocalProvider(LocalLanguage provides currentLang) {
         NavHost(
             navController = navController,
-            startDestination = Screen.Login.route
+            startDestination = startDestination
         ) {
             // -- PUBLIC --
             composable(Screen.Login.route) {

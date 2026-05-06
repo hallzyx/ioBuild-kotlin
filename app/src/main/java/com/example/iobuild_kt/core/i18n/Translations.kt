@@ -158,6 +158,8 @@ object Translations {
         "settings.password_error_required" to "Completa todos los campos",
         "settings.email_error_required" to "Ingresa un correo",
         "settings.email_error_invalid" to "Correo inválido",
+        "settings.biometric" to "Login con huella",
+        "settings.biometric_desc" to "Accede con tu huella digital",
 
         "general.loading" to "Cargando...",
         "general.error" to "Ocurrió un error",
@@ -326,6 +328,8 @@ object Translations {
         "settings.password_error_required" to "Fill in all fields",
         "settings.email_error_required" to "Enter an email",
         "settings.email_error_invalid" to "Invalid email",
+        "settings.biometric" to "Fingerprint Login",
+        "settings.biometric_desc" to "Log in using your fingerprint",
 
         "general.loading" to "Loading...",
         "general.error" to "An error occurred",
