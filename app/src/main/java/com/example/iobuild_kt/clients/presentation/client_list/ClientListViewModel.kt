@@ -73,14 +73,4 @@ class ClientListViewModel(
     fun deleteClient(id: Int) {
         viewModelScope.launch { deleteClient(id); loadClients() }
     }
-
-    fun getFilteredClients(): List<Client> {
-        val current = _state.value
-        if (current !is ClientListUiState.Success) return emptyList()
-        val q = _searchQuery.value.lowercase().trim()
-        if (q.isEmpty()) return current.clients
-        return current.clients.filter {
-            it.fullName.lowercase().contains(q) || it.email.lowercase().contains(q) || it.projectName.lowercase().contains(q)
-        }
-    }
 }

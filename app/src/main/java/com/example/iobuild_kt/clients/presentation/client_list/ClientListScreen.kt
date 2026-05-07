@@ -48,7 +48,19 @@ fun ClientListScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
-    val filtered = viewModel.getFilteredClients()
+
+    val filtered = when (val current = state) {
+        is ClientListUiState.Success -> {
+            val q = searchQuery.lowercase().trim()
+            if (q.isEmpty()) current.clients
+            else current.clients.filter {
+                it.fullName.lowercase().contains(q) ||
+                it.email.lowercase().contains(q) ||
+                it.projectName.lowercase().contains(q)
+            }
+        }
+        else -> emptyList()
+    }
 
     var showCreate by remember { mutableStateOf(false) }
     var editingClient by remember { mutableStateOf<Client?>(null) }
