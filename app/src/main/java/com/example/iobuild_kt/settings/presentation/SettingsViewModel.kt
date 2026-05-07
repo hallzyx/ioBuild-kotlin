@@ -16,7 +16,8 @@ data class SettingsUiState(
     val passwordChanged: Boolean? = null,
     val emailChanged: Boolean? = null,
     val error: String? = null,
-    val biometricEnabled: Boolean = false
+    val biometricEnabled: Boolean = false,
+    val darkModeEnabled: Boolean = false
 )
 
 class SettingsViewModel(
@@ -31,8 +32,16 @@ class SettingsViewModel(
     init {
         viewModelScope.launch {
             _state.value = _state.value.copy(
-                biometricEnabled = tokenManager.biometricEnabled.first()
+                biometricEnabled = tokenManager.biometricEnabled.first(),
+                darkModeEnabled = tokenManager.darkModeEnabled.first()
             )
+        }
+    }
+
+    fun toggleDarkMode(enabled: Boolean) {
+        viewModelScope.launch {
+            tokenManager.setDarkModeEnabled(enabled)
+            _state.value = _state.value.copy(darkModeEnabled = enabled)
         }
     }
 

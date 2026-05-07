@@ -20,6 +20,7 @@ class TokenManager(private val context: Context) {
         private val KEY_USER_EMAIL = stringPreferencesKey("user_email")
         private val KEY_USER_ROLE = stringPreferencesKey("user_role")
         private val KEY_BIOMETRIC_ENABLED = booleanPreferencesKey("biometric_enabled")
+        private val KEY_DARK_MODE = booleanPreferencesKey("dark_mode")
     }
 
     val token: Flow<String?> = context.dataStore.data.map { it[KEY_TOKEN] }
@@ -27,6 +28,7 @@ class TokenManager(private val context: Context) {
     val userEmail: Flow<String?> = context.dataStore.data.map { it[KEY_USER_EMAIL] }
     val userRole: Flow<String?> = context.dataStore.data.map { it[KEY_USER_ROLE] }
     val biometricEnabled: Flow<Boolean> = context.dataStore.data.map { it[KEY_BIOMETRIC_ENABLED] ?: false }
+    val darkModeEnabled: Flow<Boolean> = context.dataStore.data.map { it[KEY_DARK_MODE] ?: false }
 
     suspend fun saveSession(id: Int, email: String, role: String, token: String) {
         context.dataStore.edit { prefs ->
@@ -35,6 +37,10 @@ class TokenManager(private val context: Context) {
             prefs[KEY_USER_EMAIL] = email
             prefs[KEY_USER_ROLE] = role
         }
+    }
+
+    suspend fun setDarkModeEnabled(enabled: Boolean) {
+        context.dataStore.edit { it[KEY_DARK_MODE] = enabled }
     }
 
     suspend fun setBiometricEnabled(enabled: Boolean) {

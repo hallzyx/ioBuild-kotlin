@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             val currentLang by languageManager.currentLanguage.collectAsState(initial = "es")
             val scope = rememberCoroutineScope()
             val tokenManager: TokenManager = koinInject()
+            val darkMode by tokenManager.darkModeEnabled.collectAsState(initial = false)
             var autoAuth by remember { mutableStateOf<Boolean?>(null) }
 
             // Biometric auto-auth
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (autoAuth != null) {
-                IoBuildktTheme {
+                IoBuildktTheme(darkTheme = darkMode) {
                     Surface(
                         modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars)
                     ) {

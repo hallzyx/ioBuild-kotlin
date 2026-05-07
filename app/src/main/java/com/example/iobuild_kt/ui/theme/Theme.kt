@@ -16,38 +16,54 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = Neutral100,
     primaryContainer = Green90,
     onPrimaryContainer = Green10,
-    secondary = Blue40,
+
+    secondary = Teal40,
     onSecondary = Neutral100,
-    secondaryContainer = Blue80,
-    onSecondaryContainer = Color(0xFF062D45),
-    background = Neutral95,
+    secondaryContainer = Teal90,
+    onSecondaryContainer = Color(0xFF003333),
+
+    tertiary = Amber40,
+    onTertiary = Neutral100,
+    tertiaryContainer = Amber90,
+    onTertiaryContainer = Amber10,
+
+    background = GreenBg,
     onBackground = Neutral10,
     surface = Neutral100,
     onSurface = Neutral10,
-    surfaceVariant = Neutral90,
+    surfaceVariant = GreenSurfaceVariant,
     onSurfaceVariant = Color(0xFF4B5563),
+
     error = Error40,
     onError = Neutral100,
-    errorContainer = Error80,
+    errorContainer = Error90,
     onErrorContainer = Color(0xFF410002),
-    outline = Color(0xFFD1D5DB)
+    outline = GreenOutline
 )
 
 private val DarkColorScheme = darkColorScheme(
     primary = Green50,
     onPrimary = DarkGreen10,
-    primaryContainer = DarkGreen20,
+    primaryContainer = DarkGreen30,
     onPrimaryContainer = Green80,
-    secondary = Blue40,
-    onSecondary = Color(0xFF003549),
-    secondaryContainer = Color(0xFF004D6E),
-    onSecondaryContainer = Blue80,
+
+    secondary = Teal80,
+    onSecondary = Color(0xFF003333),
+    secondaryContainer = Color(0xFF004D40),
+    onSecondaryContainer = Teal90,
+
+    tertiary = Amber80,
+    onTertiary = Amber10,
+    tertiaryContainer = Color(0xFF4A2800),
+    onTertiaryContainer = Amber90,
+
     background = Color(0xFF111827),
-    onBackground = Color(0xFFF3F4F6),
+    onBackground = Color(0xFFE5E7EB),
     surface = Color(0xFF1F2937),
-    onSurface = Color(0xFFF3F4F6),
+    onSurface = Color(0xFFE5E7EB),
     surfaceVariant = Color(0xFF374151),
     onSurfaceVariant = Color(0xFFD1D5DB),
+
     error = Error80,
     onError = Color(0xFF601410),
     errorContainer = Color(0xFF8C1D18),
@@ -58,7 +74,7 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun IoBuildktTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

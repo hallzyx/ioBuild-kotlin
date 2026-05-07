@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -90,6 +91,13 @@ fun SettingsScreen(
                         checked = state.biometricEnabled,
                         onCheckedChange = viewModel::toggleBiometric
                     )
+                    BiometricSetting(
+                        title = lang("settings.dark_mode"),
+                        subtitle = lang("settings.dark_mode_desc"),
+                        icon = Icons.Default.DarkMode,
+                        checked = state.darkModeEnabled,
+                        onCheckedChange = viewModel::toggleDarkMode
+                    )
                 }
             }
         }
@@ -121,12 +129,18 @@ private fun SettingItem(title: String, icon: androidx.compose.ui.graphics.vector
 }
 
 @Composable
-private fun BiometricSetting(title: String, subtitle: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+private fun BiometricSetting(
+    title: String,
+    subtitle: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector = Icons.Default.Fingerprint,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(Icons.Default.Fingerprint, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.bodyMedium)

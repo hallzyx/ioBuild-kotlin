@@ -161,6 +161,8 @@ object Translations {
         "settings.email_error_invalid" to "Correo inválido",
         "settings.biometric" to "Login con huella",
         "settings.biometric_desc" to "Accede con tu huella digital",
+        "settings.dark_mode" to "Modo Oscuro",
+        "settings.dark_mode_desc" to "Tema oscuro para la app",
 
         "general.loading" to "Cargando...",
         "general.error" to "Ocurrió un error",
@@ -332,6 +334,8 @@ object Translations {
         "settings.email_error_invalid" to "Invalid email",
         "settings.biometric" to "Fingerprint Login",
         "settings.biometric_desc" to "Log in using your fingerprint",
+        "settings.dark_mode" to "Dark Mode",
+        "settings.dark_mode_desc" to "Dark theme for the app",
 
         "general.loading" to "Loading...",
         "general.error" to "An error occurred",
